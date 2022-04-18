@@ -1,5 +1,7 @@
 mod controller;
 mod property;
+mod service;
+mod restclient;
 use controller::{get_controller, post_controller};
 use actix_web::{web, App, HttpServer, HttpResponse, Responder};
 
