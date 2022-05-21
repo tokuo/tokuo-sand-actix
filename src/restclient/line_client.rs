@@ -1,6 +1,5 @@
 use crate::property::env_property::{get_line_token, get_line_userid};
 use reqwest;
-use std::process;
 
 pub async fn show_profile(){
     let user_id = get_line_userid();
@@ -11,18 +10,11 @@ pub async fn show_profile(){
         .header("authorization", format!("{}{}", "Bearer ".to_string(), bearer_token))
         .send()
         .await {
-        Ok(res) => res,
+        Ok(res) => res.text().await.unwrap(),
         Err(err) => {
-            println!("{}", err);
-            process::exit(1);
+            // 本番運用であればpager duty等に通知をした方が良い
+            panic!("{}", err);
         }
     };
-    let res_text = match res.text().await {
-        Ok(tex) => tex,
-        Err(err) => {
-            println!("{}", err);
-            process::exit(1);
-        }
-    };
-    dbg!(res_text);
+    dbg!(res);
 }
